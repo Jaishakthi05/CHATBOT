@@ -1,0 +1,101 @@
+import tkinter as tk #gui
+from bardapi import Bard #API
+import os
+from googletrans import Translator
+
+translator = Translator()
+
+os.environ['_BARD_API_KEY'] = 'ZAgMDpyn9ulUGHVFBx0444CI_i7pibvX-Vt60mogKTe30DdRIB5qT2UxdJnUSnmwQNDW6A.'
+
+
+
+
+
+
+def input():
+
+        val=entry.get()
+        output1.delete('1.0', tk.END) #COMMENT HERE TO REMOVE OVER LAP
+        entry.delete(0, tk.END)
+        lst=['hai',"HAI","Hai","HELLO","hello",'hi','hii',"Hello","what is your name",'what is your name?','your name']
+
+        if val in lst:
+            output1.insert(tk.END,"M:- Hello, I am M , How can I help you??\n")
+        elif val =='':
+            output1.insert(tk.END,'M:- OOPS!!! , Sory I cannot understand you!! Please say it again!! :)\n')
+
+        elif val=="who are you" or val=='what can you do':
+
+            output1.insert(tk.END,'M:- I am a AI-chat BOT. I am here to help you about your quarries!!:) \n')
+        else:
+            q=Bard().get_answer(val)['content']
+            ans = translator.translate(str(q), dest=set_lang())
+            output1.insert(tk.END,"\n")
+            #output1.insert(tk.END, "YOU:-  " + val + "\n\n")
+            #output1.insert(tk.END, '--------' * 8 + "\n\n")
+            output1.insert(tk.END,"BOT:-  \n\n"+ans.text+"\n\n")
+            output1.insert(tk.END,'--------'*14+"\n\n")
+
+
+def clear():
+    output1.delete('1.0', tk.END)
+
+
+def set_lang():
+    s=ch.get()
+    return str(s).lower()
+
+
+window= tk.Tk()
+window.geometry("780x500")
+window.configure(bg='skyblue')
+window.title("CHATBOT")
+window.resizable(False,False)
+
+
+output1=tk.Text(window,width=65,height=23,bg='white',fg='black',border=1,font=("Arial",10,"bold"))
+output1.pack()
+output1.config(padx=10,pady=10)
+output1.place(x=20,y=40)
+
+output=tk.Label(window,text="ASK ME ANYTHING!!",bg='skyblue',font=("Arial",10,"bold"))
+
+output.pack()
+output.place(x=20,y=440)
+
+
+
+
+
+entry=tk.Entry(window,width=50,fg='red',font=("Arial",10,"bold")) #input
+entry.pack()
+entry.place(x=20,y=465)
+
+output=tk.Label(window,text="AI CHATBOT",bg='skyblue',fg='white',font=("Arial",16,"bold"))
+output.pack()
+output.place(x=250,y=10)
+
+output=tk.Label(window,text="SELECT YOUR LANGUAGE:",bg='skyblue',font=("Arial",10,"bold"))
+output.pack()
+output.place(x=560,y=40)
+
+button=tk.Button(window,text="SEND",command=input,width=15,fg='black',bg='lightblue',font=("Arial",10,"bold"))
+button.pack()
+button.place(x=390,y=460)
+
+button_cl=tk.Button(window,text="CLEAR CHAT",command=clear,width=15,fg='black',bg='lightblue',font=("Arial",10,"bold"))
+button_cl.pack()
+
+button_cl.place(x=550,y=460)
+
+ch=tk.StringVar()
+ch.set("ENGLISH")
+
+box=tk.OptionMenu(window,ch,'ENGLISH','TAMIL','HINDI')
+box.pack()
+box.config(width=20,font=("Arial",10,"bold"),bg='lightblue')
+
+box.place(x=560,y=73)
+
+
+window.mainloop()
